@@ -76,7 +76,13 @@ func Setup() {
 			}
 			Current.Verbose = val
 		case "lookupenv":
-			Current.LookupEnv = strings.Split(strings.ReplaceAll(value, " ", ""), ",")
+			values := strings.Split(strings.Trim(strings.ReplaceAll(value, " ", ""), ","), ",")
+			for _, value := range values {
+				value = strings.TrimSpace(value)
+				if value != "" {
+					Current.LookupEnv = append(Current.LookupEnv, value)
+				}
+			}
 		default:
 			fmt.Printf("error: Unknown key '%s' at line '%d'\n", key, id+1)
 		}

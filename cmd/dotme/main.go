@@ -23,16 +23,21 @@ func main() {
 	switch command {
 	case "c", "config":
 		fmt.Println("Reading from:", config.Path)
+		lookupenv := strings.Join(config.Current.LookupEnv, ", $")
+
+		if len(lookupenv) > 0 {
+			lookupenv = fmt.Sprintf("$%s", lookupenv)
+		}
 
 		subcommand := args[1:]
 		if len(subcommand) == 0 {
-			fmt.Printf("LookupEnv: $%s\nGitRemote: %s\nVerbose: %t\n", strings.Join(config.Current.LookupEnv, ", $"), config.Current.GitRemote, config.Current.Verbose)
+			fmt.Printf("LookupEnv: %s\nGitRemote: %s\nVerbose: %t\n", lookupenv, config.Current.GitRemote, config.Current.Verbose)
 			return
 		}
 
 		switch subcommand[0] {
 		case "e", "env", "lookupenv":
-			fmt.Println("$" + strings.Join(config.Current.LookupEnv, ", $"))
+			fmt.Println(lookupenv)
 		case "g", "git", "gitremote":
 			fmt.Println(config.Current.GitRemote)
 		case "v", "verb", "verbose":

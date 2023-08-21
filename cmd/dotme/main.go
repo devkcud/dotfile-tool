@@ -6,12 +6,28 @@ import (
 	"strings"
 
 	"github.com/devkcud/dotfile-tool/internal/config"
+	"golang.org/x/exp/slices"
 )
 
 func main() {
 	config.Setup()
 
-	args := os.Args[1:]
+	args := make([]string, 0)
+	flags := make([]string, 0) // I don't really like the 'flag' package :/
+
+	for _, e := range os.Args[1:] {
+		if !strings.HasPrefix(e, "-") {
+			args = append(args, e)
+		} else {
+			flags = append(flags, e)
+		}
+	}
+
+	force := slices.Contains(flags, "-f") || slices.Contains(flags, "--force")
+
+	if force {
+		fmt.Println("warning: -force may cause unexpected results")
+	}
 
 	if len(args) == 0 {
 		fmt.Println("error: Need at least one argument")

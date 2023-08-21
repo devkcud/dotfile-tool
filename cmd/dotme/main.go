@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"github.com/devkcud/dotfile-tool/internal/config"
+	"github.com/devkcud/dotfile-tool/internal/tool"
 	"golang.org/x/exp/slices"
 )
 
@@ -28,6 +29,8 @@ func main() {
 	if force {
 		fmt.Println("warning: -force may cause unexpected results")
 	}
+
+	tool.Setup()
 
 	if len(args) == 0 {
 		fmt.Println("error: Need at least one argument")

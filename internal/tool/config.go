@@ -37,6 +37,15 @@ func createFileIfNotExists(filePath string, perms fs.FileMode) error {
 	return nil
 }
 
+func copyFile(src, dst string) error {
+	data, err := os.ReadFile(src)
+	if err != nil {
+		return err
+	}
+
+	return os.WriteFile(dst, data, FilePerms)
+}
+
 func Setup() {
 	if err := createDirIfNotExists(WorkDir, DirPerms); err != nil {
 		fmt.Println("error: couldn't create WorkDir", err)
@@ -56,6 +65,19 @@ func Setup() {
 	if err := createFileIfNotExists(EnvFile, FilePerms); err != nil {
 		fmt.Println("error: couldn't create EnvFile", err)
 		return
+	}
+
+	if config.Current.AddSelf {
+		if _, err := os.Stat(config.Path); err == nil {
+			if err := createDirIfNotExists(filepath.Join(ConfigDir, "dotfiles-tool"), DirPerms); err != nil {
+				fmt.Println("error: couldn't create dotfiles-tool dir", err)
+				return
+			}
+
+			if err := copyFile(config.Path, filepath.Join(ConfigDir, "dotfiles-tool", "cfg")); err != nil {
+				fmt.Println("error: couldn't copy dotfiles-tool file", err)
+			}
+		}
 	}
 
 	if strings.TrimSpace(config.Current.GitRemote) == "" {

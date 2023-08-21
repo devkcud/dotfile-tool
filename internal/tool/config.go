@@ -2,7 +2,6 @@ package tool
 
 import (
 	"fmt"
-	"io/fs"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -10,11 +9,6 @@ import (
 
 	"github.com/devkcud/dotfile-tool/internal/config"
 	"github.com/devkcud/dotfile-tool/internal/utils"
-)
-
-const (
-	DirPerms  fs.FileMode = 0755
-	FilePerms fs.FileMode = 0644
 )
 
 var (

@@ -3,20 +3,23 @@ package utils
 import (
 	"io/fs"
 	"os"
+)
 
-	"github.com/devkcud/dotfile-tool/internal/tool"
+const (
+	DirPerms  fs.FileMode = 0755
+	FilePerms fs.FileMode = 0644
 )
 
 func CreateDir(dirPath string) error {
 	if _, err := os.Stat(dirPath); os.IsNotExist(err) {
-		return os.MkdirAll(dirPath, tool.DirPerms)
+		return os.MkdirAll(dirPath, DirPerms)
 	}
 	return nil
 }
 
 func CreateFile(filePath string) error {
 	if _, err := os.Stat(filePath); os.IsNotExist(err) {
-		return os.WriteFile(filePath, []byte(""), tool.FilePerms)
+		return os.WriteFile(filePath, []byte(""), FilePerms)
 	}
 	return nil
 }
@@ -27,5 +30,5 @@ func CopyFile(src, dst string) error {
 		return err
 	}
 
-	return os.WriteFile(dst, data, tool.FilePerms)
+	return os.WriteFile(dst, data, FilePerms)
 }

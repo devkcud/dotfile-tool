@@ -52,6 +52,9 @@ func Setup() {
 		}
 	}
 
+	if _, err := os.Stat(WorkDir); err == nil {
+		return
+	}
 	if strings.TrimSpace(config.Current.GitRemote) == "" {
 		return
 	}

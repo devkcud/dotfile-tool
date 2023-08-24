@@ -40,6 +40,12 @@ func main() {
 	command := strings.ToLower(args[0])
 
 	switch command {
+	case "+", "a", "add":
+		tool.Add(args[1:])
+	case "-", "r", "remove":
+		// tool.Remove(args[1:])
+	case "l", "list":
+		// tool.List()
 	case "c", "config":
 		fmt.Println("Reading from:", config.Path)
 		lookupenv := strings.Join(config.Current.LookupEnv, ", $")

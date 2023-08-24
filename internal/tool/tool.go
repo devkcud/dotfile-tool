@@ -2,15 +2,24 @@ package tool
 
 import (
 	"fmt"
-	"io"
 	"os"
 	"path/filepath"
 
 	"github.com/devkcud/dotfile-tool/internal/utils"
 )
 
-func Add(args []string) {
+func Add(args []string, shared bool) {
+	if shared {
+		fmt.Printf("Using shared directory: %s\n", SharedDir)
+	}
+
 	for _, path := range args {
+		outdir := filepath.Join(ConfigDir, path)
+
+		if shared {
+			outdir = filepath.Join(SharedDir, path)
+		}
+
 		fmt.Printf("Adding: %s\n", path)
 
 		smt, err := os.Stat(path)
@@ -20,11 +29,11 @@ func Add(args []string) {
 		}
 
 		if smt.IsDir() {
-			if utils.CopyFolder(path, filepath.Join(ConfigDir, path)) != nil {
+			if utils.CopyFolder(path, outdir) != nil {
 				fmt.Println("error:", err)
 			}
 		} else {
-			if utils.CopyFile(path, filepath.Join(ConfigDir, path)) != nil {
+			if utils.CopyFile(path, outdir) != nil {
 				fmt.Println("error:", err)
 			}
 		}

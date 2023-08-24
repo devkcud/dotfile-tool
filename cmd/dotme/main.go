@@ -25,6 +25,7 @@ func main() {
 	}
 
 	force := slices.Contains(flags, "-f") || slices.Contains(flags, "--force")
+	shared := slices.Contains(flags, "-s") || slices.Contains(flags, "--shared")
 
 	if force {
 		fmt.Println("warning: -force may cause unexpected results")
@@ -41,7 +42,7 @@ func main() {
 
 	switch command {
 	case "+", "a", "add":
-		tool.Add(args[1:])
+		tool.Add(args[1:], shared)
 	case "-", "r", "remove":
 		// tool.Remove(args[1:])
 	case "l", "list":

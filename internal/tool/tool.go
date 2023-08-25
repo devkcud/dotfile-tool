@@ -53,8 +53,4 @@ func Add(args []string, shared bool) {
 			}
 		}
 	}
-
-	if config.Current.Verbose {
-		fmt.Println("Done")
-	}
 }

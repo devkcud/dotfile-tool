@@ -51,7 +51,7 @@ func main() {
 	case "-", "r", "rem", "remove":
 		tool.Rem(args[1:], shared)
 	case "l", "list":
-		tool.List(shared)
+		tool.List(args[1:], shared)
 	case "c", "config":
 		fmt.Println("Reading from:", config.Path)
 		lookupenv := strings.Join(config.Current.LookupEnv, ", $")

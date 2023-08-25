@@ -79,15 +79,31 @@ func Rem(args []string, shared bool) {
 	}
 }
 
-func List(shared bool) {
-	entries, err := os.ReadDir(ConfigDir)
-
-	if shared {
-		entries, err = os.ReadDir(SharedDir)
+func List(args []string, shared bool) {
+	from := ""
+	if len(args) > 0 {
+		from = args[0]
 	}
 
+	readfrom := filepath.Join(ConfigDir, from)
+
+	if shared {
+		readfrom = filepath.Join(SharedDir, from)
+	}
+
+	if fileinfo, err := os.Stat(readfrom); err != nil {
+		fmt.Println("error:", err)
+	} else {
+		if !fileinfo.IsDir() {
+			fmt.Println(fileinfo.Name(), "[FILE]")
+			return
+		}
+	}
+
+	entries, err := os.ReadDir(filepath.Join(readfrom, from))
+
 	if err != nil {
-		fmt.Println("error", err)
+		fmt.Println("error:", err)
 		return
 	}
 
@@ -95,7 +111,9 @@ func List(shared bool) {
 		name := entry.Name()
 
 		if entry.IsDir() {
-			name += "/"
+			name += " [DIR]"
+		} else {
+			name += " [FILE]"
 		}
 
 		fmt.Println(name)

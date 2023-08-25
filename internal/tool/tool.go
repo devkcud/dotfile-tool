@@ -78,3 +78,26 @@ func Rem(args []string, shared bool) {
 		}
 	}
 }
+
+func List(shared bool) {
+	entries, err := os.ReadDir(ConfigDir)
+
+	if shared {
+		entries, err = os.ReadDir(SharedDir)
+	}
+
+	if err != nil {
+		fmt.Println("error", err)
+		return
+	}
+
+	for _, entry := range entries {
+		name := entry.Name()
+
+		if entry.IsDir() {
+			name += "/"
+		}
+
+		fmt.Println(name)
+	}
+}

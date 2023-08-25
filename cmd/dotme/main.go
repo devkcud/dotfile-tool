@@ -48,8 +48,8 @@ func main() {
 	switch command {
 	case "+", "a", "add":
 		tool.Add(args[1:], shared)
-	case "-", "r", "remove":
-		// tool.Remove(args[1:])
+	case "-", "r", "rem", "remove":
+		tool.Rem(args[1:], shared)
 	case "l", "list":
 		// tool.List()
 	case "c", "config":

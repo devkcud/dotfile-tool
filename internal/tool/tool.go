@@ -54,3 +54,27 @@ func Add(args []string, shared bool) {
 		}
 	}
 }
+
+func Rem(args []string, shared bool) {
+	if shared {
+		fmt.Printf("Using shared directory: %s\n", SharedDir)
+	}
+
+	for _, path := range args {
+		outdir := filepath.Join(ConfigDir, path)
+
+		if shared {
+			outdir = filepath.Join(SharedDir, path)
+		}
+
+		if config.Current.Verbose {
+			fmt.Printf("Removing: %s\n", outdir)
+		}
+
+		if _, err := os.Stat(outdir); err == nil {
+			os.RemoveAll(outdir)
+		} else {
+			fmt.Println("error:", err)
+		}
+	}
+}

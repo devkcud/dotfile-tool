@@ -5,6 +5,7 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/devkcud/dotfile-tool/internal/config"
 	"github.com/devkcud/dotfile-tool/internal/utils"
 )
 
@@ -20,12 +21,26 @@ func Add(args []string, shared bool) {
 			outdir = filepath.Join(SharedDir, path)
 		}
 
-		fmt.Printf("Adding: %s\n", path)
+		if config.Current.Verbose {
+			fmt.Printf("Adding: %s\n", path)
+		}
 
 		smt, err := os.Stat(path)
 		if err != nil {
 			fmt.Println("error:", err)
 			continue
+		}
+
+		// Remove the file/folder if it already exists to evict merge
+		if _, err := os.Stat(outdir); err == nil {
+			if config.Current.Verbose {
+				fmt.Printf("Removing '%s' to evict merge\n", outdir)
+			}
+			os.RemoveAll(outdir)
+		}
+
+		if config.Current.Verbose {
+			fmt.Printf("Copying file '%s' to '%s'\n", path, outdir)
 		}
 
 		if smt.IsDir() {
@@ -37,7 +52,9 @@ func Add(args []string, shared bool) {
 				fmt.Println("error:", err)
 			}
 		}
+	}
 
+	if config.Current.Verbose {
 		fmt.Println("Done")
 	}
 }

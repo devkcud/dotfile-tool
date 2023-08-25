@@ -26,9 +26,14 @@ func main() {
 
 	force := slices.Contains(flags, "-f") || slices.Contains(flags, "--force")
 	shared := slices.Contains(flags, "-s") || slices.Contains(flags, "--shared")
+	verbose := slices.Contains(flags, "-V") || slices.Contains(flags, "--verbose")
 
 	if force {
 		fmt.Println("warning: -force may cause unexpected results")
+	}
+
+	if verbose {
+		config.Current.Verbose = true
 	}
 
 	tool.Setup()
@@ -73,5 +78,9 @@ func main() {
 		}
 	default:
 		fmt.Printf("error: Unknown command: %s\n", command)
+	}
+
+	if config.Current.Verbose {
+		fmt.Println("Done")
 	}
 }

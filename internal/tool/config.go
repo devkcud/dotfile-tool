@@ -13,7 +13,7 @@ import (
 
 var (
 	WorkDir   = filepath.Join(os.TempDir(), "dotfile-tool")
-	ConfigDir = filepath.Join(WorkDir, ".config")
+	ConfigDir = filepath.Join(WorkDir, "config")
 	SharedDir = filepath.Join(WorkDir, "shared")
 	EnvFile   = filepath.Join(WorkDir, "env")
 )
@@ -52,7 +52,7 @@ func Setup() {
 		}
 	}
 
-	if _, err := os.Stat(WorkDir); err == nil {
+	if _, err := os.Stat(filepath.Join(WorkDir, ".git")); err == nil {
 		return
 	}
 	if strings.TrimSpace(config.Current.GitRemote) == "" {

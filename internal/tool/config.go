@@ -54,9 +54,8 @@ func Setup() {
 
 	// NOTE: idk if it's optimal to call that many git commands
 	if _, err := os.Stat(filepath.Join(WorkDir, ".git")); err == nil {
-		os.Chdir(WorkDir)
-
 		gitUrl := exec.Command("git", "remote", "get-url", "origin")
+		gitUrl.Dir = WorkDir
 
 		output, _ := gitUrl.Output()
 
@@ -64,6 +63,7 @@ func Setup() {
 			fmt.Println("warning: updating git remote to", config.Current.GitRemote)
 
 			remote := exec.Command("git", "remote", "set-url", "origin", config.Current.GitRemote)
+			remote.Dir = WorkDir
 
 			if err := remote.Run(); err != nil {
 				fmt.Println("error: couldn't set url remote", err)
@@ -78,6 +78,7 @@ func Setup() {
 		return
 	}
 
+	last, _ := os.Getwd()
 	os.Chdir(WorkDir)
 
 	if err := exec.Command("git", "init").Run(); err != nil {
@@ -92,4 +93,6 @@ func Setup() {
 		return
 	}
 	fmt.Println("running: git remote add origin", config.Current.GitRemote)
+
+	os.Chdir(last)
 }

@@ -15,6 +15,9 @@ type config struct {
 	// Initialize git repository with it's remote url. It won't be used if empty.
 	GitRemote string
 
+	// Add self .config files to the dotfiles directory
+	AddSelf bool
+
 	// Print more stuff
 	Verbose bool
 }
@@ -28,6 +31,7 @@ func Setup() {
 	Current = &config{
 		LookupEnv: []string{},
 		GitRemote: "",
+		AddSelf:   true,
 		Verbose:   false,
 	}
 
@@ -75,6 +79,13 @@ func Setup() {
 				continue
 			}
 			Current.Verbose = val
+		case "addself":
+			val, err := strconv.ParseBool(value)
+			if err != nil {
+				fmt.Printf("error: Invalid value '%s' for key '%s' at line '%d'\n", value, key, id+1)
+				continue
+			}
+			Current.AddSelf = val
 		case "lookupenv":
 			values := strings.Split(strings.Trim(strings.ReplaceAll(value, " ", ""), ","), ",")
 			for _, value := range values {

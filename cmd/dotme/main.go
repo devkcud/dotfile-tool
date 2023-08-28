@@ -6,12 +6,37 @@ import (
 	"strings"
 
 	"github.com/devkcud/dotfile-tool/internal/config"
+	"github.com/devkcud/dotfile-tool/internal/tool"
+	"golang.org/x/exp/slices"
 )
 
 func main() {
 	config.Setup()
 
-	args := os.Args[1:]
+	args := make([]string, 0)
+	flags := make([]string, 0) // I don't really like the 'flag' package :/
+
+	for _, e := range os.Args[1:] {
+		if !strings.HasPrefix(e, "-") {
+			args = append(args, e)
+		} else {
+			flags = append(flags, e)
+		}
+	}
+
+	force := slices.Contains(flags, "-f") || slices.Contains(flags, "--force")
+	shared := slices.Contains(flags, "-s") || slices.Contains(flags, "--shared")
+	verbose := slices.Contains(flags, "-V") || slices.Contains(flags, "--verbose")
+
+	if force {
+		fmt.Println("warning: -force may cause unexpected results")
+	}
+
+	if verbose {
+		config.Current.Verbose = true
+	}
+
+	tool.Setup()
 
 	if len(args) == 0 {
 		fmt.Println("error: Need at least one argument")
@@ -21,6 +46,12 @@ func main() {
 	command := strings.ToLower(args[0])
 
 	switch command {
+	case "+", "a", "add":
+		tool.Add(args[1:], shared)
+	case "-", "r", "rem", "remove":
+		tool.Rem(args[1:], shared)
+	case "l", "list":
+		tool.List(args[1:], shared)
 	case "c", "config":
 		fmt.Println("Reading from:", config.Path)
 		lookupenv := strings.Join(config.Current.LookupEnv, ", $")
@@ -47,5 +78,9 @@ func main() {
 		}
 	default:
 		fmt.Printf("error: Unknown command: %s\n", command)
+	}
+
+	if config.Current.Verbose {
+		fmt.Println("Done")
 	}
 }

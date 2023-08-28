@@ -31,11 +31,9 @@ func CreateFile(filePath string) error {
 }
 
 func WriteFile(filePath string, out string) error {
-	if _, err := os.Stat(filePath); os.IsNotExist(err) {
-		if err := os.WriteFile(filePath, []byte(out), FilePerm); err != nil {
-			return fmt.Errorf("failed to create file: %v", err)
-		}
-	}
+    if err := os.WriteFile(filePath, []byte(out), FilePerm); err != nil {
+        return fmt.Errorf("failed to create file: %v", err)
+    }
 	return nil
 }
 

@@ -6,7 +6,7 @@ import (
 	"strings"
 
 	"github.com/devkcud/dotfile-tool/internal/config"
-	"github.com/devkcud/dotfile-tool/internal/tool"
+	"github.com/devkcud/dotfile-tool/internal/utils"
 	"golang.org/x/exp/slices"
 )
 
@@ -60,7 +60,7 @@ func UpdateEnv(force bool) {
 		}
 	}
 
-	if err := os.WriteFile(tool.EnvFile, []byte(out), 0644); err != nil {
+	if err := utils.WriteFile(config.EnvFile, out); err != nil {
 		fmt.Println("error:", err)
 		return
 	}

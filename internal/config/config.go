@@ -27,7 +27,16 @@ var (
 	Path    string
 )
 
+var WorkDir, ConfigDir, SharedDir, EnvFile string
+
 func Setup() {
+	cfg, _ := os.UserCacheDir()
+
+	WorkDir = filepath.Join(cfg, "workdir.dotfile-tool")
+	ConfigDir = filepath.Join(WorkDir, "config")
+	SharedDir = filepath.Join(WorkDir, "shared")
+	EnvFile = filepath.Join(WorkDir, "user.env")
+
 	Current = &config{
 		LookupEnv: []string{},
 		GitRemote: "",

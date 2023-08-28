@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"github.com/devkcud/dotfile-tool/internal/config"
+	"github.com/devkcud/dotfile-tool/internal/env"
 	"github.com/devkcud/dotfile-tool/internal/tool"
 	"golang.org/x/exp/slices"
 )
@@ -76,6 +77,8 @@ func main() {
 		default:
 			fmt.Printf("error: Unknown subcommand: %s\n", subcommand[0])
 		}
+	case "eu", "ue", "env-up", "up-env", "env-update", "update-env":
+		env.UpdateEnv(force)
 	default:
 		fmt.Printf("error: Unknown command: %s\n", command)
 	}

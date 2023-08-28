@@ -10,7 +10,7 @@ import (
 	"golang.org/x/exp/slices"
 )
 
-func UpdateEnv() {
+func UpdateEnv(force bool) {
 	// Generally cause it's not a good idea to include them this (--force flag will add them anyway)
 	skip := []string{
 		"HOME",
@@ -35,10 +35,13 @@ func UpdateEnv() {
 		"COLORTERM",
 	}
 
+	skipped := 0
+
 	var out string
 
 	for _, env := range config.Current.LookupEnv {
-		if slices.Contains(skip, env) {
+		if slices.Contains(skip, env) && !force {
+			skipped++
 			continue
 		}
 
@@ -56,5 +59,5 @@ func UpdateEnv() {
 		return
 	}
 
-	fmt.Printf("Updated env file with %d vars\n", len(strings.Split(out, "\n")))
+	fmt.Printf("Updated env file with %d vars (skipped %d vars)\n", len(strings.Split(out, "\n")), skipped)
 }

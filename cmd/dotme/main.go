@@ -78,7 +78,7 @@ func main() {
 			fmt.Printf("error: Unknown subcommand: %s\n", subcommand[0])
 		}
 	case "eu", "ue", "env-update", "update-env":
-		env.UpdateEnv()
+		env.UpdateEnv(force)
 	default:
 		fmt.Printf("error: Unknown command: %s\n", command)
 	}

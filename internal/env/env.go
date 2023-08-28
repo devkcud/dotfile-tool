@@ -65,5 +65,5 @@ func UpdateEnv(force bool) {
 		return
 	}
 
-	fmt.Printf("Updated env file with %d vars (skipped %d vars)\n", len(strings.Split(out, "\n")) - 1, skipped)
+	fmt.Printf("Updated env file with %d vars (skipped %d vars)\n", len(strings.Split(out, "\n"))-1, skipped)
 }

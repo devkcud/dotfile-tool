@@ -41,6 +41,9 @@ func UpdateEnv(force bool) {
 
 	for _, env := range config.Current.LookupEnv {
 		if slices.Contains(skip, env) && !force {
+			if config.Current.Verbose {
+				fmt.Printf("Skipping env\t$%s\n", env)
+			}
 			skipped++
 			continue
 		}
@@ -50,6 +53,9 @@ func UpdateEnv(force bool) {
 		envValue = strings.ReplaceAll(envValue, os.Getenv("HOME"), "$HOME")
 
 		if strings.TrimSpace(envValue) != "" {
+			if config.Current.Verbose {
+				fmt.Printf("Adding env\t$%s\n", env)
+			}
 			out += fmt.Sprintf("$%s=%s\n", env, envValue)
 		}
 	}
@@ -59,5 +65,5 @@ func UpdateEnv(force bool) {
 		return
 	}
 
-	fmt.Printf("Updated env file with %d vars (skipped %d vars)\n", len(strings.Split(out, "\n")), skipped)
+	fmt.Printf("Updated env file with %d vars (skipped %d vars)\n", len(strings.Split(out, "\n")) - 1, skipped)
 }

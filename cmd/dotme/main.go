@@ -25,9 +25,28 @@ func main() {
 		}
 	}
 
+	help := slices.Contains(flags, "-h") || slices.Contains(flags, "--help")
 	force := slices.Contains(flags, "-f") || slices.Contains(flags, "--force")
 	shared := slices.Contains(flags, "-s") || slices.Contains(flags, "--shared")
 	verbose := slices.Contains(flags, "-V") || slices.Contains(flags, "--verbose")
+
+	if help {
+		fmt.Println(`dotfile-tool [flags] <command> <args>
+
+Commands:
+    +, a, add
+    -, r, rem, remove
+    l, list
+    c, config
+    eu, ue, env-up, up-env, env-update, update-env
+
+Flags:
+    -f, --force
+    -s, --shared
+    -V, --verbose
+    -h, --help`)
+		return
+	}
 
 	if force {
 		fmt.Println("warning: -force may cause unexpected results")

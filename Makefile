@@ -8,15 +8,11 @@ GOCLEAN=$(GO) clean
 
 all: build
 
-build: clean
-	mk +$(BUILD_DIR)
-	$(GOBUILD) -v ./cmd/dotme
-
-run:
-	./$(OUT)
+build: cmd/dotme
+	$(GOBUILD) -o $(OUT) -v ./$<
 
 clean:
 	rm -rf $(BUILD_DIR)
 	$(GOCLEAN)
 
-.PHONY: build run clean
+.PHONY: build clean
